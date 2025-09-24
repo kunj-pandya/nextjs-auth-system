@@ -1,20 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { axios } from "axios";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 
 export default function Loginpage() {
+    const router = useRouter();
 
     const [user, setUser] = React.useState({
         email: "",
         password: "",
     });
 
-    const onLogin = async () => {
+    const [buttonDisabled, setButtonDisabled] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
+    const onLogin = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post("/api/users/login", user);
+            console.log("Login success", response.data);
+            toast.success("Login success");
+            router.push("/profile");
+        } catch (error: any) {
+            console.log("Login failed", error.message);
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    useEffect(() => {
+        if (user.email.length > 0 && user.password.length > 0) {
+            setButtonDisabled(false);
+        } else {
+            setButtonDisabled(true);
+        }
+    }, [user]);
 
 
     return (
@@ -60,9 +85,13 @@ export default function Loginpage() {
                 {/* Button */}
                 <button
                     onClick={onLogin}
-                    className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 cursor-pointer transition-colors mb-4"
+                    className={`w-full py-3 rounded-lg font-medium transition-colors mb-4
+                         ${buttonDisabled || loading
+                            ? "bg-gray-500 cursor-not-allowed"
+                            : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+                        }`}
                 >
-                    Login Here
+                    {loading ? "Logging in..." : "Login Here"}
                 </button>
 
                 {/* Link */}
