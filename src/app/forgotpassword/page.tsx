@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -7,7 +7,7 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email) return toast.error("Please enter your email");
 
@@ -16,8 +16,10 @@ export default function ForgotPasswordPage() {
       const res = await axios.post("/api/users/forgotpassword", { email });
       toast.success(res.data.message || "Reset link sent to your email!");
       setEmail("");
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Something went wrong");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.error || "Something went wrong");
+      }
     } finally {
       setLoading(false);
     }

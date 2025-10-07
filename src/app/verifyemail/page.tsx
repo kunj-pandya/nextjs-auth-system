@@ -15,18 +15,25 @@ export default function VerifyEmailPage() {
         try {
             await axios.post('/api/users/verifyemail', { token });
             setVerified(true);
-        } catch (error: any) {
+        } catch (err: unknown) {
             setError(true);
-            console.log(error.response.data);
+            if (axios.isAxiosError(err)) {
+                console.log(err.response?.data);
+            } else if (err instanceof Error) {
+                console.log(err.message);
+            } else {
+                console.log(err);
+            }
         }
     }, [token]);
+
     useEffect(() => {
         const urlToken = window.location.search.split("=")[1];
         setToken(urlToken || "");
     }, []);
 
     useEffect(() => {
-        if (token.length > 0) verifyUserEmail();
+        verifyUserEmail();
     }, [verifyUserEmail]);
 
     return (

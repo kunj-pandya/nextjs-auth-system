@@ -21,7 +21,12 @@ export async function POST(request: Request) {
             message: "Reset password link sent to your email",
             success: true,
         });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (err: unknown) {
+        let errorMessage = "Something went wrong";
+
+        if (err instanceof Error) {
+            errorMessage = err.message;
+        }
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }
