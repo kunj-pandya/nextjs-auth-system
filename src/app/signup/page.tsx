@@ -10,15 +10,20 @@ export default function Signuppage() {
 
     const router = useRouter();
 
-    const [user, setUser] = React.useState({
+    interface User {
+        username: string;
+        email: string;
+        password: string;
+    }
+
+    const [user, setUser] = React.useState<User>({
         email: "",
         password: "",
         username: "",
     });
 
-    const [buttonDisabled, setButtonDisabled] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
-
+    const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false);
+    const [loading, setLoading] = React.useState<boolean>(false);
     //  validation function
     const validateForm = () => {
         if (!user.username || user.username.length < 3) {
@@ -51,9 +56,14 @@ export default function Signuppage() {
             toast.success("Signup successfull!");
             console.log("Signup suceess", response.data);
             router.push("/login");
-        } catch (error: any) {
-            console.log("Sign Up Failed", error.message);
-            toast.error(error.response?.data?.error || error.message);
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                toast.error(err.response?.data?.error || err.message);
+            } else if (err instanceof Error) {
+                toast.error(err.message);
+            } else {
+                toast.error("Something went wrong!");
+            }
         } finally {
             setLoading(false);
         }

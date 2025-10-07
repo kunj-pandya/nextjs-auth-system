@@ -2,8 +2,14 @@ import nodemailer from "nodemailer";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
 
+interface SendEmailParams {
+    email: string;
+    emailType: "VERIFY" | "RESET";
+    userId: string | number;
+}
 
-export const sendEmail = async ({ email, emailType, userId }: any) => {
+
+export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) => {
     try {
         // create a hashed token
         const hashedToken = await bcrypt.hash(userId.toString(), 10);
@@ -61,8 +67,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         const mailresponse = await transporter.sendMail(mailOptions);
         return mailresponse;
 
-    } catch (error: any) {
-        throw new Error(error.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            throw new Error(err.message);
+        } else {
+            throw new Error("Something went wrong while sending the email");
+        }
     }
 }
 

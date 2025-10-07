@@ -1,4 +1,10 @@
-export default function UserProfilePage({ params }: any) {
+interface UserProfilePageProps {
+    params: {
+        id: string;
+    };
+}
+
+export default function UserProfilePage({ params }: UserProfilePageProps) {
     return (
         <div className="min-h-screen bg-zinc-900 text-white flex items-center justify-center">
             <div className="bg-zinc-800 p-6 rounded-2xl shadow-lg w-80 text-center">

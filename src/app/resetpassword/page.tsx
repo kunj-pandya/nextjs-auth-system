@@ -13,7 +13,7 @@ export default function ResetPasswordPage() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleReset = async (e: any) => {
+    const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!password || !confirmPassword) {
@@ -34,8 +34,14 @@ export default function ResetPasswordPage() {
             });
             toast.success(res.data.message || "Password reset successfully!");
             setTimeout(() => router.push("/login"), 2000);
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || "Invalid or expired token");
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                toast.error(err.response?.data?.error || err.message);
+            } else if (err instanceof Error) {
+                toast.error(err.message);
+            } else {
+                toast.error("Something went wrong");
+            }
         } finally {
             setLoading(false);
         }
