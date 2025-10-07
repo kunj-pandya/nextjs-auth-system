@@ -33,17 +33,30 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             }
         });
 
+        const actionLink = emailType === "VERIFY" ? `${process.env.DOMAIN}/verifyemail?token=${hashedToken}`
+            : `${process.env.DOMAIN}/resetpassword?token=${hashedToken}`;
+
+
+        const htmlContent = `<div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2 style="color: #333;">${emailType === "VERIFY" ? "Verify Your Email" : "Reset Your Password"}</h2>
+        <p>
+        Click <a href="${actionLink}" style="color: #ff6600; text-decoration: none;">here</a> to 
+        ${emailType === "VERIFY" ? "verify your email address" : "reset your password"}.
+        </p>
+        <p>This link will expire in <b>1 hour</b>.</p>
+        <p>If you did not request this, please ignore this email.</p>
+        <br />
+        </div>`;
+
         const mailOptions = {
             from: "kunj@gmail.com",
             to: email,
-            subject: emailType === "VERIFY" ? "verify your email" : "Reset your password",
-            html: `<div style="font-family: Arial, sans-serif; line-height: 1.6;">
-            <p>Click<a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}">
-            here</a>to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}.</p>
-            <p>This link will expire in 1 hour.</p>
-            <p>If you did not request this, you can safely ignore this email.</p>
-            </div>`,
-        }
+            subject:
+                emailType === "VERIFY"
+                    ? "Verify Your Email"
+                    : "Reset Your Password",
+            html: htmlContent,
+        };
 
         const mailresponse = await transporter.sendMail(mailOptions);
         return mailresponse;
