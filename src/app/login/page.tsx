@@ -82,6 +82,16 @@ export default function Loginpage() {
                     className="w-full p-3 bg-zinc-900 text-white border border-zinc-700 rounded-lg mb-6 focus:outline-none"
                 />
 
+                {/* Forgot Password */}
+                <div className="text-right mb-6">
+                    <Link
+                        href="/forgotpassword"
+                        className="text-sm text-orange-400 hover:underline"
+                    >
+                        Forgot Password?
+                    </Link>
+                </div>
+
                 {/* Button */}
                 <button
                     onClick={onLogin}
