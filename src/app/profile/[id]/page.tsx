@@ -1,7 +1,7 @@
 import UserProfileClient from "./userProfileClient";
 
-
 export default function UserProfilePage({ params }: { params: { id: string } }) {
+
     return <UserProfileClient userId={params.id} />;
 }
 
