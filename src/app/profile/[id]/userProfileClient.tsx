@@ -17,22 +17,17 @@ interface Props {
 export default function UserProfileClient({ userId }: Props) {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState(true);
 
-    // Fetch user details
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const res = await axios.get(`/api/users/${userId}`);
                 setUser(res.data);
-            } catch (err: unknown) {
-                if (axios.isAxiosError(err)) {
-                    toast.error(err.response?.data?.error || err.message);
-                } else if (err instanceof Error) {
-                    toast.error(err.message);
-                } else {
-                    toast.error("Something went wrong");
-                }
+            } catch (err) {
+                if (axios.isAxiosError(err)) toast.error(err.response?.data?.error || err.message);
+                else if (err instanceof Error) toast.error(err.message);
+                else toast.error("Something went wrong");
             } finally {
                 setLoading(false);
             }
@@ -40,20 +35,15 @@ export default function UserProfileClient({ userId }: Props) {
         fetchUser();
     }, [userId]);
 
-    // Logout
     const handleLogout = async () => {
         try {
             await axios.get("/api/users/logout");
             toast.success("Logged out successfully");
             router.push("/login");
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                toast.error(err.response?.data?.error || err.message);
-            } else if (err instanceof Error) {
-                toast.error(err.message);
-            } else {
-                toast.error("Something went wrong");
-            }
+        } catch (err) {
+            if (axios.isAxiosError(err)) toast.error(err.response?.data?.error || err.message);
+            else if (err instanceof Error) toast.error(err.message);
+            else toast.error("Something went wrong");
         }
     };
 
@@ -84,3 +74,4 @@ export default function UserProfileClient({ userId }: Props) {
         </div>
     );
 }
+

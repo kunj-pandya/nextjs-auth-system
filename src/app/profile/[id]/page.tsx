@@ -1,9 +1,16 @@
-import UserProfileClient from "./userProfileClient";
 
-export default function UserProfilePage({ params }: { params: { id: string } }) {
+import UserProfileClient from "./UserProfileClient";
 
-    return <UserProfileClient userId={params.id} />;
+interface UserProfilePageProps {
+    params: Promise<{ id: string }>;
 }
+
+export default async function UserProfilePage({ params }: UserProfilePageProps) {
+    const { id } = await params;
+    return <UserProfileClient userId={id} />;
+}
+
+
 
 // export default function UserProfilePage({ params }: { params: { id: string } }) {
 //     return (
