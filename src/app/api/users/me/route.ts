@@ -11,8 +11,11 @@ export async function GET(request: NextRequest) {
         const userId = await getDataFormToken(request);
         const user = await User.findOne({ _id: userId }).select("-password");
         return NextResponse.json({ message: "User Found", data: user });
-    } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 400 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 400 });
     }
 
 }
