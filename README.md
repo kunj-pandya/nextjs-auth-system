@@ -122,7 +122,7 @@ MAIL_TRAP_PASSWORD=your_mailtrap_password
 
 ## Clone the repo
 ```
-git clone https://github.com/kunj-pandya/nextjs-auth-system.git
+git clone https://github.com/kunj-pandya/nextjs-authentication-system.git
 ```
 
 ## Install dependencies
