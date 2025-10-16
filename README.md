@@ -46,6 +46,7 @@ A **full-featured authentication system** built with **Next.js**, **MongoDB**, *
 
 ---
 
+```
 ## Folder Structure
 src
 ├── 📁 app/
@@ -73,7 +74,7 @@ src
 │ └── getDataFromToken.ts
 ├── .env
 └── README.md
-
+```
 
 ---
 
@@ -101,7 +102,7 @@ src
 1. User clicks “Forgot Password?” link.
 2. Enters email → gets a reset link via Mailtrap.
 3. Link looks like:  
-   `https://yourdomain.com/resetpassword?token=<hashedToken>`
+   `https://nextjs-auth-system-blush.vercel.app/verifyemail?token=<hashedToken>>`
 4. User sets new password → backend verifies token, hashes password, clears token.
 
 ---
